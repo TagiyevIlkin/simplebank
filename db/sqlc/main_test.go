@@ -19,7 +19,7 @@ const (
 func TestMain(m *testing.M) {
 	conn, err := sql.Open(dbDriver, dbSource)
 	if err != nil {
-		log.Fatal("Cannot connect to the database")
+		log.Fatal("CVannot connect to the database")
 	}
 	testQueries = New(conn)
 
