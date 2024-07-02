@@ -46,7 +46,7 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Run migrations
-      run: migrate up
+      run: make migrateup
 
     - name: Test
       run: make test
