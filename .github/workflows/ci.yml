@@ -31,7 +31,8 @@ jobs:
           - 5432:5432
           
     steps:
-     - name: Set up Go 1.x
+
+    - name: Set up Go 1.x
       uses: actions/setup-go@v2
       id: go
 
@@ -40,6 +41,6 @@ jobs:
 
     - name: Run migrations
       run: migrate up
-      
+
     - name: Test
       run: make test
