@@ -1,10 +1,7 @@
 package api
 
 import (
-	"bytes"
-	"encoding/json"
 	"fmt"
-	"io"
 	"reflect"
 	"testing"
 
@@ -119,16 +116,16 @@ func randomUser(t *testing.T) (user db.User, password string) {
 	return
 }
 
-func requireBodyMatchUser(t *testing.T, body *bytes.Buffer, user db.User) {
-	data, err := io.ReadAll(body)
-	require.NoError(t, err)
+// func requireBodyMatchUser(t *testing.T, body *bytes.Buffer, user db.User) {
+// 	data, err := io.ReadAll(body)
+// 	require.NoError(t, err)
 
-	var gotUser db.User
-	err = json.Unmarshal(data, &gotUser)
+// 	var gotUser db.User
+// 	err = json.Unmarshal(data, &gotUser)
 
-	require.NoError(t, err)
-	require.Equal(t, user.Username, gotUser.Username)
-	require.Equal(t, user.FullName, gotUser.FullName)
-	require.Equal(t, user.Email, gotUser.Email)
-	require.Empty(t, gotUser.HashedPassword)
-}
+// 	require.NoError(t, err)
+// 	require.Equal(t, user.Username, gotUser.Username)
+// 	require.Equal(t, user.FullName, gotUser.FullName)
+// 	require.Equal(t, user.Email, gotUser.Email)
+// 	require.Empty(t, gotUser.HashedPassword)
+// }
