@@ -14,12 +14,17 @@ type Pasetomaker struct {
 	symmetricKey []byte
 }
 
-func (maker *Pasetomaker) CreateToken(usename string, duraton time.Duration) (token string, err error) {
+func (maker *Pasetomaker) CreateToken(usename string, duraton time.Duration) (string, *Payload, error) {
 	payload, err := NewPayload(usename, duraton)
 	if err != nil {
-		return "", err
+		return "", payload, err
 	}
-	return maker.paseto.Encrypt(maker.symmetricKey, payload, nil)
+	token, err := maker.paseto.Encrypt(maker.symmetricKey, payload, nil)
+	if err != nil {
+		return "", payload, err
+	}
+
+	return token, payload, err
 
 }
 

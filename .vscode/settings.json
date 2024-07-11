@@ -1,6 +1,6 @@
 {
-	"editor.insertSpaces": false,
-	"editor.tabSize": 4,
-	"workbench.editor.showTabs": "single",
-	"editor.detectIndentation": false
+	       "editor.insertSpaces": false,
+	       "editor.tabSize": 4,
+	       "workbench.editor.showTabs": "single",
+	       "editor.detectIndentation": false
 }
