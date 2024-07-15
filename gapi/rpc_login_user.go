@@ -7,12 +7,18 @@ import (
 	db "github.com/TagiyevIlkin/simplebank/db/sqlc"
 	"github.com/TagiyevIlkin/simplebank/pb"
 	"github.com/TagiyevIlkin/simplebank/util"
+	"github.com/TagiyevIlkin/simplebank/val"
+	"google.golang.org/genproto/googleapis/rpc/errdetails"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 func (server *Server) LoginUser(ctx context.Context, req *pb.LoginUserRequest) (*pb.LoginUserResponse, error) {
+
+	if violations := validateLoginUserRequest(req); len(violations) > 0 {
+		return nil, invalidArgumentError(violations)
+	}
 
 	user, err := server.store.GetUser(ctx, req.GetUsername())
 	if err != nil {
@@ -33,7 +39,7 @@ func (server *Server) LoginUser(ctx context.Context, req *pb.LoginUserRequest) (
 		server.config.AccessTokenDuration)
 
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "Failed to create acces token user", err)
+		return nil, status.Errorf(codes.Internal, "Failed to create acces token user:%s", err)
 	}
 
 	refreshToken, refreshPayload, err := server.tokenMaker.CreateToken(
@@ -41,21 +47,22 @@ func (server *Server) LoginUser(ctx context.Context, req *pb.LoginUserRequest) (
 		server.config.RefreshTokenDuration)
 
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "Failed to create refresh token user", err)
+		return nil, status.Errorf(codes.Internal, "Failed to create refresh token user:%s", err)
 	}
 
+	mtdt := server.extrachMetaData(ctx)
 	serssion, err := server.store.CreateSession(ctx, db.CreateSessionParams{
 		ID:           refreshPayload.ID,
 		Username:     user.Username,
 		RefreshToken: refreshToken,
-		UserAgent:    "", // TODO: fill from gRpc context metadata
-		ClientIp:     "",
+		UserAgent:    mtdt.UserAgent,
+		ClientIp:     mtdt.ClientIp,
 		IsBlocked:    false,
 		ExpiresAt:    refreshPayload.ExpiredAt,
 	})
 
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "Failed to create session", err)
+		return nil, status.Errorf(codes.Internal, "Failed to create session:%s", err)
 	}
 
 	rsp := &pb.LoginUserResponse{
@@ -68,4 +75,15 @@ func (server *Server) LoginUser(ctx context.Context, req *pb.LoginUserRequest) (
 	}
 
 	return rsp, nil
+}
+
+func validateLoginUserRequest(req *pb.LoginUserRequest) (violations []*errdetails.BadRequest_FieldViolation) {
+	if err := val.ValidateFullName(req.GetUsername()); err != nil {
+		violations = append(violations, fieldViolation("username", err))
+	}
+	if err := val.ValidatePassword(req.GetPassword()); err != nil {
+		violations = append(violations, fieldViolation("password", err))
+	}
+
+	return violations
 }
