@@ -6,12 +6,15 @@ services:
      - POSTGRES_USER=root
      - POSTGRES_PASSWORD=Ilkin561
      - POSTGRES_DB=simple_bank
+  
   api: 
     build: 
       context: .
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
+      - "9090:9090"
+
     environment:
       - DB_SOURCE=postgresql://root:Ilkin561@postgres:5432/simple_bank?sslmode=disable
     depends_on:
