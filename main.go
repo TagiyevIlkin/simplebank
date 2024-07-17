@@ -138,9 +138,10 @@ func runGatewayServer(config util.Config, store db.Store) {
 		log.Fatal().Msg("Cannot create  listerner:")
 	}
 
-	log.Info().Msgf("start HTTP gateway server at %v", listerner.Addr())
+	log.Info().Msgf("start HTTP gateway server at %v", listerner.Addr().String())
 
-	err = http.Serve(listerner, mux)
+	handler := gapi.HttpLogger(mux)
+	err = http.Serve(listerner, handler)
 	if err != nil {
 		log.Fatal().Msg("Cannot start HTTP gateway server")
 	}
