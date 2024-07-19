@@ -15,6 +15,7 @@ import (
 	db "github.com/TagiyevIlkin/simplebank/db/sqlc"
 	_ "github.com/TagiyevIlkin/simplebank/doc/statik"
 	"github.com/TagiyevIlkin/simplebank/gapi"
+	"github.com/TagiyevIlkin/simplebank/mail"
 	"github.com/TagiyevIlkin/simplebank/pb"
 	"github.com/TagiyevIlkin/simplebank/util"
 	"github.com/TagiyevIlkin/simplebank/worker"
@@ -56,7 +57,7 @@ func main() {
 
 	taskDistrubutor := worker.NewRedisTaskDistrubutor(redisOpt)
 
-	go runTaskProcessor(redisOpt, store)
+	go runTaskProcessor(config, redisOpt, store)
 	go runGatewayServer(config, store, taskDistrubutor)
 
 	runGrpcServer(config, store, taskDistrubutor)
@@ -75,8 +76,9 @@ func runDBMigration(migrationURL string, dbSource string) {
 	log.Info().Msg("db migrated successfully")
 }
 
-func runTaskProcessor(redisOpt asynq.RedisClientOpt, store db.Store) {
-	taskprocessor := worker.NewRedisTaskProcessor(redisOpt, store)
+func runTaskProcessor(config util.Config, redisOpt asynq.RedisClientOpt, store db.Store) {
+	mailSender := mail.NewGmailSender(config.EmailSenderName, config.EmailSenderAddress, config.EmailSenderPassword)
+	taskprocessor := worker.NewRedisTaskProcessor(redisOpt, store, mailSender)
 
 	log.Info().Msg("start task processor")
 
