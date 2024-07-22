@@ -33,7 +33,7 @@ func RandomString(n int) string {
 
 // RandomOwner generaters a random owner name
 func RandomOwner() string {
-	return RandomString(6)
+	return RandomString(8)
 }
 
 // RandomMoney generaters a random amount of money
