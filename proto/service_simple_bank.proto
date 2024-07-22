@@ -29,7 +29,7 @@ service SimpleBank{
 	
 	rpc CreateUser (CreateUserRequest) returns (CreateUserResponse){
 		option (google.api.http) = {
-			 post: "/v1/ceate_user"
+			 post: "/v1/create_user"
 			 body: "*"
 		};
 	}
