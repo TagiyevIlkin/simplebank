@@ -34,9 +34,9 @@ func ValidateFullName(value string) error {
 	if err := ValidateString(value, 3, 100); err != nil {
 		return err
 	}
-	if !isValidFullName(value) {
-		return fmt.Errorf("must contain only letters or spaces")
-	}
+	// if !isValidFullName(value) {
+	// 	return fmt.Errorf("must contain only letters or spaces")
+	// }
 	return nil
 }
 func ValidatePassword(value string) error {

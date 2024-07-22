@@ -72,7 +72,7 @@ func (server *Server) UpdateUser(ctx context.Context, req *pb.UpdateUserRequest)
 
 func validateUpdateUserRequest(req *pb.UpdateUserRequest) (violations []*errdetails.BadRequest_FieldViolation) {
 
-	if err := val.ValidateFullName(req.GetUsername()); err != nil {
+	if err := val.ValidateUserName(req.GetUsername()); err != nil {
 		violations = append(violations, fieldViolation("username", err))
 	}
 
