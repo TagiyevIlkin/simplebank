@@ -16,7 +16,7 @@ func TestCreateEntry(t *testing.T) {
 		AccountID: account1.ID,
 		Amount:    util.RandomMoney(),
 	}
-	entry, err := testQueries.CreateEntry(context.Background(), arg)
+	entry, err := testStore.CreateEntry(context.Background(), arg)
 
 	require.NoError(t, err)
 	require.NotEmpty(t, entry)

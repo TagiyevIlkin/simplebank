@@ -11,7 +11,6 @@ import (
 type Config struct {
 	RedisAddress         string        `mapstructure:"REDIS_ADDRESS"`
 	Enviroment           string        `mapstructure:"ENVIROMENT"`
-	DBDriver             string        `mapstructure:"DB_DRIVER"`
 	DBSource             string        `mapstructure:"DB_SOURCE"`
 	MigrationURL         string        `mapstructure:"MIGRATION_URL"`
 	HTTPServerAddress    string        `mapstructure:"HTTP_SERVER_ADDRESS"`

@@ -21,7 +21,7 @@
     "application/json"
   ],
   "paths": {
-    "/v1/ceate_user": {
+    "/v1/create_user": {
       "post": {
         "operationId": "SimpleBank_CreateUser",
         "responses": {
