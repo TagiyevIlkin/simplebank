@@ -15,9 +15,9 @@ type JWTMaker struct {
 	secretKey string
 }
 
-func (maker *JWTMaker) CreateToken(usename string, duraton time.Duration) (string, *Payload, error) {
+func (maker *JWTMaker) CreateToken(usename string, role string, duraton time.Duration) (string, *Payload, error) {
 
-	payload, err := NewPayload(usename, duraton)
+	payload, err := NewPayload(usename, role, duraton)
 	if err != nil {
 		return "", payload, err
 	}
@@ -66,7 +66,7 @@ func (maker *JWTMaker) VerifyToken(token string) (*Payload, error) {
 // NewJWTMaker creates a new JWTMaker
 func NewJWTMaker(secretKey string) (Maker, error) {
 	if len(secretKey) < minSecretyKeySize {
-		return nil, fmt.Errorf("Invalid key size: must be at least %d characters", minSecretyKeySize)
+		return nil, fmt.Errorf("invalid key size: must be at least %d characters", minSecretyKeySize)
 	}
 
 	return &JWTMaker{

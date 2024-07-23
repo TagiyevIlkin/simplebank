@@ -14,8 +14,8 @@ type Pasetomaker struct {
 	symmetricKey []byte
 }
 
-func (maker *Pasetomaker) CreateToken(usename string, duraton time.Duration) (string, *Payload, error) {
-	payload, err := NewPayload(usename, duraton)
+func (maker *Pasetomaker) CreateToken(usename string, role string, duraton time.Duration) (string, *Payload, error) {
+	payload, err := NewPayload(usename, role, duraton)
 	if err != nil {
 		return "", payload, err
 	}
