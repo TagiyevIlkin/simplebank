@@ -2,6 +2,7 @@ package gapi
 
 import (
 	"context"
+	"log"
 	"time"
 
 	db "github.com/TagiyevIlkin/simplebank/db/sqlc"
@@ -46,6 +47,8 @@ func (server *Server) CreateUser(ctx context.Context, req *pb.CreateUserRequest)
 		},
 	}
 
+	log.Println("user creating...")
+	time.Sleep(time.Second * 10)
 	txResult, err := server.store.CreateUserTx(ctx, args)
 	if err != nil {
 		if db.ErrorCode(err) == db.UniqueViolation {
@@ -57,6 +60,8 @@ func (server *Server) CreateUser(ctx context.Context, req *pb.CreateUserRequest)
 	rsp := &pb.CreateUserResponse{
 		User: convertUser(txResult.User),
 	}
+
+	log.Println("user created...")
 	return rsp, nil
 }
 

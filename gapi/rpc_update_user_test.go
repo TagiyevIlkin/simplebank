@@ -67,7 +67,7 @@ func TestUpdateUserApi(t *testing.T) {
 			},
 			buildContext: func(t *testing.T, tokenMaker token.Maker) context.Context {
 
-				accessToken, _, err := tokenMaker.CreateToken(user.Username, time.Minute)
+				accessToken, _, err := tokenMaker.CreateToken(user.Username, user.Role, time.Minute)
 				require.NoError(t, err)
 				bearerToken := fmt.Sprintf("%s %s", authorizationBearer, accessToken)
 				md := metadata.MD{
